@@ -30,12 +30,16 @@ staff-role-builder.py after chapter 3 had this:
 
 Which it seems I'm able to mitigate my pain in chapter, sometimes it's good to be wrong
 
-## First realization in practicals: magic8Ball.py is that whenever there is a need for different written messages printed to depending on different results the wall of elifs will come and I'm not even sure when if ever this can be done differently
+## Realizations in practicals: 
 
-## Variation in coinflip.py exercise I'm testing try/except as I intend to use this in my prompt assistant program, I made the program unecessarily complicated, using try int(intput()) is probably something that is recurrent at least at this level of programs where the user inputs a choice
+1. magic8Ball.py is that whenever there is a need for different written messages printed to depending on different results the wall of elifs will come and I'm not even sure when if ever this can be done differently
 
-## Some of these problems feel pointless to copy by hand but it's a rule i defined and will not change it mid chapter because I feel bored, it may change later if i decide they are not a valuable use of my time but for now I keep forcing myself to do the boring reps
+2. Variation in coinflip.py exercise I'm testing try/except as I intend to use this in my prompt assistant program, I made the program unecessarily complicated, using try int(intput()) is probably something that is recurrent at least at this level of programs where the user inputs a choice
 
-## in the callstack exercise I realized functions can be defined in any order as long as they are defined when called
+3. Some of these problems feel pointless to copy by hand but it's a rule i defined and will not change it mid chapter because I feel bored, it may change later if i decide they are not a valuable use of my time but for now I keep forcing myself to do the boring reps
+
+ and then the reps turned into gains -> in the callstack exercise I realized functions can be defined in any order as long as they are defined when called
 
 ## in the ch04 staff_role_builder.py version I will be attempting to use most of what is learned in the chapter 4 including time.sleep for a more pleasant UX
+
+## After a bigger effort the staff_role_builder.py is no longer a blob of confusing code but split into functions that can be maintained, removed the time.sleep, it was there just to add some UX closer to what we expect a program to do but it was merely decorative. Now we have plenty of functions that can be easily maintained, copied into other projects...or turned into lists when chapter 6 arrives, conscious decision - push through chapter 05 debugging, not because it's not important but because the lack of arrays, lists, tuples etc is feeling like too much of constraint but it sure makes me value them more than i did whenever i tried learning coding in the past.
