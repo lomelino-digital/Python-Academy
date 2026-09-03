@@ -43,3 +43,8 @@ Which it seems I'm able to mitigate my pain in chapter, sometimes it's good to b
 ## in the ch04 staff_role_builder.py version I will be attempting to use most of what is learned in the chapter 4 including time.sleep for a more pleasant UX
 
 ## After a bigger effort the staff_role_builder.py is no longer a blob of confusing code but split into functions that can be maintained, removed the time.sleep, it was there just to add some UX closer to what we expect a program to do but it was merely decorative. Now we have plenty of functions that can be easily maintained, copied into other projects...or turned into lists when chapter 6 arrives, conscious decision - push through chapter 05 debugging, not because it's not important but because the lack of arrays, lists, tuples etc is feeling like too much of constraint but it sure makes me value them more than i did whenever i tried learning coding in the past.
+
+
+## When going for the reading of chapter 5 I noticed the back of the page and had the collatz exercise, I did it writing the code by hand as these are the rules of Python Academy, integrated a rule that was just that until now, a rule i had read about
+
+- Do not optimize for lines of code, calculate and store a result that is intended to be used more than once and then use it from the store variable
