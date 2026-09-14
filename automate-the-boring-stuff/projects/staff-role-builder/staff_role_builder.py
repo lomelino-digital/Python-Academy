@@ -1,6 +1,6 @@
 import sys
 
-# initially i had the funcitons all as type_of_class argument
+# initially i had the functions all as type_of_class argument
 # Then i changed it beause i thought that even though we were working
 # In local scope that it was still better to have different variable names
 # But now i see it was more work than necessary creating variable names that
@@ -21,56 +21,29 @@ def classSelector():
             print(role_type + ' is an Invalid Selection, please select an integer from 1 to 7')
             continue
 
-
+# get_role() used to have a 7 elif sequence, now is handled with a simple list
+# It was worth finding alternatives, by forcing myself to write the program
+# without the lists i truly appreciate the simplifying and power of lists
+# to more of an extent at least
 
 def get_role(type_of_class):         
 
-        # Now we feel the pain of having 7 categories and having to write 
-        # a block for each, the user has defined what class type of prompt he 
-        # wishes to build but we are reducing the pain using function already
-        # Hopefully this operation, thinking this function could just be part of
-        # classSelector() but this way i have an int value and a string class
-        # name value for the roles, not sure if it will be useful but it's
-        # simple to merge the functions if i decide to, or maybe turn this function
-        # into some sort of list
+        # The way this is handled with a list makes a function much simpler
+        role_choice = ["Prompt Engineer","Researcher","Auditor","Brainstorm Assistant","Teacher","Article Writer","Fiction Writer"]
+        return role_choice[type_of_class-1]
+ 
 
-        if type_of_class == 1:            
-            # print('The new staff member is a Prompt Engineer type.')
-            return "Prompt Engineer"
-        elif type_of_class == 2:
-            # print('The new staff member is a Researcher type.')
-            return "Researcher"
-        elif type_of_class == 3:
-            # print('The new staff member is an Auditor type.')
-            return "Auditor"
-        elif type_of_class == 4:
-            # print('The new staff member is a Brainstorm Assistant type.')
-            return "Brainstorm Assistant"
-        elif type_of_class == 5:
-            # print('The new staff member is a Teacher type.')
-            return "Teacher"
-        elif type_of_class == 6:
-            # print('The new staff member is a Article Writer type.')
-            return "Article Writer"
-        elif type_of_class == 7:
-            # print('The new staff member is a Fiction Writer type.')
-            return "Fiction Writer"
-
-    # I was wanting just one more function for the whole prompt
-    # But having 2 choices i want to still guardrail the possible
-    # options as i don't the user causing errors with typos
-    # and other user issues
+# using a list here too, small simplification of the code since there are only 2 options but it becomes cleaner and more scalable
         
 def architectureType(arch_role):
     print('How do you imagine this ' + arch_role + ' working as a monolith or a modular execution?\n')
-    while True:
+    architecture_types = ["Monolith", "Modular Execution"]
+    while True:        
         architecture_type = input('(1) Monolith\n\n(2) Modular Execution\n\n>')
         try:
             architecture_type = int(architecture_type)
-            if architecture_type == 1:
-                return "Monolith"
-            elif architecture_type == 2: 
-                return "Modular Execution"
+            if  0 < architecture_type <=2:
+                return architecture_types[architecture_type-1] 
             else:
                 print(str(architecture_type) + ' is not a valid number, Please select a valid number, will this ' + arch_role + 'work as a:\n')
                 continue
@@ -78,27 +51,23 @@ def architectureType(arch_role):
             print(architecture_type + ' is not a valid choice, Please select a valid number, will this ' + arch_role + 'work as a:\n')
             continue
 
-    # Probably suboptimal do declare the global variables
-    # But since this is chapter 4 or less i don't see a 
-    # Way to return multiple values from a function which
-    # Probably you can if you can just return a list or a
-    # Tuple
+# The tuple return allows me to remove the global variables
+# and still output 3 values, i can also call the architecture factors easily
+# and add more if needed
             
 def promptContext():            
     print('What do you intend this new prompt member to assist you with, what problems it should tackle or how it can be useful')
-    global architecture_context
     architecture_context = input('>')
     print('What data, information, examples or analogies better contribute for this staff members execution to be as intended?')
-    global architecture_data
     architecture_data = input('>')
     print('What special instructions you would like to add to the prompt before we start building?')
-    global architecture_instructions
     architecture_instructions = input('>')
     # For a fun little moment
     if architecture_instructions == 'make no mistakes':
         print('------------------------------')
         print('I see you are good at this!')
         print('------------------------------')
+    return architecture_context, architecture_data, architecture_instructions
 
 
 def classSpecs(spec_role):
@@ -146,9 +115,9 @@ while True:
             classID = classSelector()
             role = get_role(classID)
             architecture_type = architectureType(role)
-            promptContext()
+            context_factors=promptContext()
             class_specs = classSpecs(classID)
-            magic_prompt = 'We are working on a new ' +  '**' + architecture_type + '**' + ' execution \n\n' + '## Role: \n' + role + '\n\n' + '## More role specific intructions:\n\n' + class_specs + '## Context: \n' + architecture_context + '\n\n' + '## Data: \n' + architecture_data + '\n\n' + '## Special Instructions: \n' + architecture_instructions + '\n\n' + ' Ask exactly 5 high-value clarifying questions per round. After each round, evaluate whether the objective, responsibilities, constraints, inputs, outputs, architecture, and success criteria are sufficiently clear to construct the staff role. If not, ask another round of 5 questions. Do not begin constructing the final role until the specification is sufficiently unambiguous.'
+            magic_prompt = 'We are working on a new ' +  '**' + architecture_type + '**' + ' execution \n\n' + '## Role: \n' + role + '\n\n' + '## More role specific intructions:\n\n' + class_specs + '## Context: \n' + context_factors[0] + '\n\n' + '## Data: \n' + context_factors[1] + '\n\n' + '## Special Instructions: \n' + context_factors[2] + '\n\n' + ' Ask exactly 5 high-value clarifying questions per round. After each round, evaluate whether the objective, responsibilities, constraints, inputs, outputs, architecture, and success criteria are sufficiently clear to construct the staff role. If not, ask another round of 5 questions. Do not begin constructing the final role until the specification is sufficiently unambiguous.'
             print('Please copy and paste the following prompt into the llm and take it from there:\n')
             print('----------------------------------------------')
             print(magic_prompt)
