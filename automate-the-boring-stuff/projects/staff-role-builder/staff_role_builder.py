@@ -11,15 +11,11 @@ def classSelector():
     print('Please select numbers 1 to 7 from the following:\n\n 1. Prompt Engineer \n\n 2. Researcher \n\n 3. Auditor \n\n 4. Brainstorm Assistant \n\n 5. Teacher \n\n 6. Article Writer \n\n 7. Fiction Writer')
     while True:              
         role_type = input('Select a class type (1-7): ')
-        try:
-            role_type = int(role_type)       
-            if 0 < role_type <= 7:
-                return role_type 
-            print(str(role_type) + ' is an Invalid Selection, please select an integer from 1 to 7')
-            continue
-        except ValueError:
-            print(role_type + ' is an Invalid Selection, please select an integer from 1 to 7')
-            continue
+        if role_type.isdecimal() and 0 < int(role_type) <= 7:
+            return int(role_type)
+        print(str(role_type) + ' is an Invalid Selection, please select an integer from 1 to 7')
+        continue
+
 
 # get_role() used to have a 7 elif sequence, now is handled with a simple list
 # It was worth finding alternatives, by forcing myself to write the program
@@ -63,7 +59,7 @@ def promptContext():
     print('What special instructions you would like to add to the prompt before we start building?')
     architecture_instructions = input('>')
     # For a fun little moment
-    if architecture_instructions == 'make no mistakes':
+    if 'make no mistakes' in architecture_instructions:
         print('------------------------------')
         print('I see you are good at this!')
         print('------------------------------')
@@ -106,7 +102,7 @@ print()
 while True:
     print('What would you like to build?\n')
     type_of_prompt = input('(1) Single operation prompt\n(2) A new member of AI Staff\n(3) Exit\n')
-    try:
+    if type_of_prompt.isdecimal():
         type_of_prompt = int(type_of_prompt)
         if type_of_prompt == 3:
             print('Thank you for your hard word Mister Operator, come back anytime.')
@@ -145,7 +141,7 @@ while True:
             elif keep_building == 'y':                
                 break
             continue
-    except ValueError:        
+    else:       
         print('Error detected')
-        print(type_of_prompt + 'is not one of the available options, please select 1, 2 or 3')
+        print(type_of_prompt + ' is not one of the available options, please select 1, 2 or 3')
         continue
