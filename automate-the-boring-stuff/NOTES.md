@@ -1,7 +1,9 @@
-# Chapter 6 - lists
+# At the end of chapter 8
 
-An antecipated chapter. Lot's of learning and one of those points where i understood how much i still needed to learn, specially when it comes to application. 
-Edit: Will push through the next 2 chapters and focusing on projects at that time before progressing further with the book. Chapter 8 is now program to be a first checkpoint to focus on building for some weeks after that
+One of the big milestones i set for myself.
 
-I had to use for/else which i hadn't previously in chapter 3 and didn't realize was a thing which add another concept and tool.
-Interesting that for/else runs the else whenever the for completes without breaks
+Still fully grasping the utility of dictionaries and finding that .isalnum and .isdecimal() are useful ways to validate inputs but very limited comparing to try, except and raise.
+
+More specific notes on some of the programs.
+
+This is a great checkpoint to start consolidating and focusing on projects using this material. I may keep reading the book but won't do such structured study for now.
