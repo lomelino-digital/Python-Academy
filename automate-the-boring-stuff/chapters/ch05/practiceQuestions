@@ -1,0 +1,17 @@
+#   1.  Write an assert statement that triggers an AssertionError if the variable spam is an integer less than 10.
+
+spam = input('How much spam?')
+assert int(spam) >= 10 , 'Spam is less than 10 :-('
+
+#   2.  Write an assert statement that triggers an AssertionError
+#       if the variables eggs and bacon contain strings that are the same as each other, even if their cases are different. 
+#       (That is, 'hello' and 'hello' are considered the same, as are 'goodbye' and 'GOODbye'.)
+
+eggs = input('eggs: ')
+bacon = input('bacon: ')
+
+assert eggs.upper() != bacon.upper() , 'Eggs and bacon cannot be the same.'
+
+#   3.  Write an assert statement that always triggers an AssertionError.
+
+assert False , 'Assertion Error is guaranteed'
