@@ -8,12 +8,12 @@ import sys
 
 def classSelector():
     print("What is the class of the new staff member?\n\n")
-    print('Please select numbers 1 to 7 from the following:\n\n 1. Prompt Engineer \n\n 2. Researcher \n\n 3. Auditor \n\n 4. Brainstorm Assistant \n\n 5. Teacher \n\n 6. Article Writer \n\n 7. Fiction Writer')
+    print('Please select numbers 1 to 7 from the following:\n\nPrompt Engineer \n\n 2. Researcher \n\n 3. Auditor \n\n 4. Brainstorm Assistant \n\n 5. Teacher \n\n 6. Article Writer \n\n 7. Fiction Writer')
     while True:              
         role_type = input('Select a class type (1-7): ')
         if role_type.isdecimal() and 0 < int(role_type) <= 7:
             return int(role_type)
-        print(str(role_type) + ' is an Invalid Selection, please select an integer from 1 to 7')
+        print(f"{role_type} is an Invalid Selection, please select an integer from 1 to 7")
         continue
 
 
@@ -32,20 +32,20 @@ def get_role(type_of_class):
 # using a list here too, small simplification of the code since there are only 2 options but it becomes cleaner and more scalable
         
 def architectureType(arch_role):
-    print('How do you imagine this ' + arch_role + ' working as a monolith or a modular execution?\n')
+    print(f"How do you imagine this {arch_role} working as a monolith or a modular execution?\n")
     architecture_types = ["Monolith", "Modular Execution"]
     while True:        
         architecture_type = input('(1) Monolith\n\n(2) Modular Execution\n\n>')
-        try:
+        if architecture_type.isdecimal():
             architecture_type = int(architecture_type)
             if  0 < architecture_type <=2:
                 return architecture_types[architecture_type-1] 
             else:
-                print(str(architecture_type) + ' is not a valid number, Please select a valid number, will this ' + arch_role + 'work as a:\n')
+                print(f"{architecture_type} is not a valid number, Please select a valid number, will this {arch_role} work as a:\n")
                 continue
-        except ValueError:
-            print(architecture_type + ' is not a valid choice, Please select a valid number, will this ' + arch_role + 'work as a:\n')
-            continue
+        
+        print(f"{architecture_type} is not a valid choice, Please select a valid number, will this {arch_role}work as a:\n")
+        continue
 
 # The tuple return allows me to remove the global variables
 # and still output 3 values, i can also call the architecture factors easily
@@ -70,7 +70,7 @@ def classSpecs(spec_role):
     if spec_role == 3:
         print('What will you needed audited? (example: Text, Code, A spreadsheet')
         why_audit = input('>')
-        return 'This auditor specializes in:\n' + why_audit
+        return f"This auditor specializes in:\n{why_audit}"
     elif spec_role == 2:
         print('Building a Researcher type.\n')
         print('Please be explicit, will you be using a regular search, deep research feature or other type (which?) with this prompt?\n')
@@ -79,7 +79,7 @@ def classSpecs(spec_role):
         why_research = input('>')             
    
        
-        return 'We are building a research specialist type, this research specialist should be optimized for:\n\n' + optimize_research + '\n\n The users specific goal with this research assistant is ' + why_research + ' Provide structure data and ask questions that help find the best desired output for the user.'
+        return f"We are building a research specialist type, this research specialist should be optimized for:\n\n{optimize_research}\n\n The users specific goal with this research assistant is {why_research} Provide structure data and ask questions that help find the best desired output for the user."
 
     else:
         return 'Ask if more specificity is required.'
@@ -90,7 +90,7 @@ def classSpecs(spec_role):
         
 def singlePrompt():
     operation_type = input('Please describe what you would like this prompt to do:\n')
-    return 'the user is trying to create a prompt to do: ' + operation_type + ' ask 5 to 10 clarifying questions achieve more specificity in the result, these questions should guide the user to explore his intent in the request as well provide clarification on what the output should be, after the user replies ask 5 more questions and keep asking if further clarification is deemed necessary'       
+    return f"the user is trying to create a prompt to do: {operation_type} ask 5 to 10 clarifying questions achieve more specificity in the result, these questions should guide the user to explore his intent in the request as well provide clarification on what the output should be, after the user replies ask 5 more questions and keep asking if further clarification is deemed necessary"       
     
 
 # The program starts running here:
@@ -113,7 +113,7 @@ while True:
             architecture_type = architectureType(role)
             context_factors=promptContext()
             class_specs = classSpecs(classID)
-            magic_prompt = 'We are working on a new ' +  '**' + architecture_type + '**' + ' execution \n\n' + '## Role: \n' + role + '\n\n' + '## More role specific intructions:\n\n' + class_specs + '## Context: \n' + context_factors[0] + '\n\n' + '## Data: \n' + context_factors[1] + '\n\n' + '## Special Instructions: \n' + context_factors[2] + '\n\n' + ' Ask exactly 5 high-value clarifying questions per round. After each round, evaluate whether the objective, responsibilities, constraints, inputs, outputs, architecture, and success criteria are sufficiently clear to construct the staff role. If not, ask another round of 5 questions. Do not begin constructing the final role until the specification is sufficiently unambiguous.'
+            magic_prompt = f"We are working on a new **{architecture_type}** execution \n\n## Role: \n{role}\n\n## More role specific intructions:\n\n{class_specs}## Context: \n{context_factors[0]}\n\n## Data: \n{context_factors[1]}\n\n## Special Instructions: \n{context_factors[2]}\n\n Ask exactly 5 high-value clarifying questions per round. After each round, evaluate whether the objective, responsibilities, constraints, inputs, outputs, architecture, and success criteria are sufficiently clear to construct the staff role. If not, ask another round of 5 questions. Do not begin constructing the final role until the specification is sufficiently unambiguous."
             print('Please copy and paste the following prompt into the llm and take it from there:\n')
             print('----------------------------------------------')
             print(magic_prompt)
@@ -128,7 +128,7 @@ while True:
 
         else:            
             print('Error detected')
-            print(str(type_of_prompt) + ' is not one of the available options, please select 1, 2 or 3')
+            print(f"{type_of_prompt} is not one of the available options, please select 1, 2 or 3")
             continue
         while True:
             keep_building = input('Build another? (y/n):')
@@ -143,5 +143,5 @@ while True:
             continue
     else:       
         print('Error detected')
-        print(type_of_prompt + ' is not one of the available options, please select 1, 2 or 3')
+        print(f"{type_of_prompt} is not one of the available options, please select 1, 2 or 3")
         continue
