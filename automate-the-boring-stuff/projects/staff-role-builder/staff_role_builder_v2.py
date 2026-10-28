@@ -1,8 +1,17 @@
-import sys, pyperclip
+#!/usr/bin/env python3
 
-def introduzir_numero(message,n1,n2):
+import sys
+pyperclip_available = False
+
+try:
+    import pyperclip
+    pyperclip_available = True
+except ModuleNotFoundError:
+    print("Pyperclip not installed, you will have to copy any results by hand.")
+
+def introduzir_numero(n1,n2,message = "Choose a number: "):
     while True:
-        numero = input(message)
+        numero = input(message).strip()
         if numero.isdecimal():
             numero = int(numero)
             if n1 <= numero <= n2:
@@ -18,7 +27,7 @@ def yes_or_no(question):
     while True:   
         print(question)     
         resposta = input("(Y)es or (N)o: " )
-        resposta = resposta.lower()
+        resposta = resposta.lower().strip()
         if resposta == 'y' or resposta == 'n':
             if resposta == 'y':
                 return True
@@ -28,7 +37,7 @@ def yes_or_no(question):
 
 
 
-def get_next(prompt,master_dictionary,master_messages):
+def get_next(prompt,master_dictionary,master_messages = "Make your choice: "):
     while True:
         message = ''
         print(master_messages[prompt])
@@ -36,7 +45,7 @@ def get_next(prompt,master_dictionary,master_messages):
             message += f"({i+1}) {text}\n"
         message += f'(0) Help\n'
             
-        option = introduzir_numero(message,0,len(master_dictionary[prompt]))
+        option = introduzir_numero(0,len(master_dictionary[prompt]),message)
 
         if option == 0:
             help_manual()
@@ -72,7 +81,9 @@ def role_builder():
 def context_builder():
     magic_prompt = []
     print("Please write some context details, why and what are you looking to achieve: ")
-    context = input()
+    context = input('\n>')
+    if not context:
+        context = "Not provided."
     magic_prompt.append(context)
     output_style = promptsmaster["custom_prompt_settings"][get_next("custom_prompt_settings",promptsmaster,prompt_messages) - 1]
     if output_style == "Custom Settings (Advanced)":
@@ -88,7 +99,9 @@ def context_builder():
 def fine_tune():
     magic_prompt = []
     print("Please provide any special instructions you would like to add: ")
-    special_instructions = input()
+    special_instructions = input('\n>')
+    if not special_instructions:
+        special_instructions = "Not provided."
     magic_prompt.append(special_instructions)
     
     reply = yes_or_no("Would you like to refine your request through questioning \n(Meta-prompting recommended for higher specificity.):")
@@ -103,7 +116,10 @@ def fine_tune():
 def prompt_builder():
     magic_prompt = []
     print("Start by naming your assistant, this should be descriptive of what it is. \n(Examples: Unrelenting Teacher, Deep History Researcher, SEO Guru): ")
-    magic_prompt.append(input())  
+    name = input('\n>')
+    if not name:
+        name = "Assistant described below."
+    magic_prompt.append(name)  
     magic_prompt.extend(role_builder())    
     magic_prompt.extend(context_builder())
     magic_prompt.extend(fine_tune())
@@ -112,7 +128,9 @@ def prompt_builder():
 
 def prompt_output(magic_prompt):
     subtype_key = magic_prompt[2]
-    comprehensive_description = role_descriptions[subtype_key]
+    comprehensive_description = role_descriptions.get(subtype_key,
+                                f"""### 🧠 Your Identity & Memory\n- 
+                                # Role: Specialist in {subtype_key}\n- Focus: Professional execution""")
 
     return (
         f"# {magic_prompt[0]}\n\n"
@@ -131,14 +149,39 @@ def prompt_output(magic_prompt):
     )
 
 
-def copy_or_no(text):    
-    if yes_or_no("Would like to copy the prompt into your clipboard now?"):
-        pyperclip.copy(text)
-        print("\n----------------------------------------------")
-        print("Magic Prompt successfully copied to clipboard!")
-    
-        print("\nYou can now directly paste into your chatbot.")
-        print("----------------------------------------------")
+def copy_or_no(text):
+    if not pyperclip_available:
+        print("\nAutomatic copy not possible, tool unavailable, please copy the output by hand.")
+        return    
+    if yes_or_no("Would like to copy the prompt into your clipboard now?"):        
+        try:
+            pyperclip.copy(text)
+            print("\n----------------------------------------------")
+            print("Magic Prompt successfully copied to clipboard!")
+        
+            print("\nYou can now directly paste into your chatbot.")
+            print("----------------------------------------------")
+        except Exception:
+            print("\nAutomatic copy not possible, tool unavailable, please copy the output by hand.")
+
+
+def main():
+    print("Welcome to your assistant builder companion.\n")            
+    print("Your helper and guide for best llm usage by Lomelino Digital\n")
+    help_manual()
+    while True:
+            
+            magic_prompt = prompt_builder()
+            magic_prompt_output = prompt_output(magic_prompt)
+            print(50*'-')
+            print(magic_prompt_output)
+            print(50*'-')
+            copy_or_no(magic_prompt_output)
+            if (yes_or_no("Would you like to build another assistant? ")):
+                continue
+            else:
+                print("\nSee you soon!")
+                break
 
 
 
@@ -147,53 +190,35 @@ def copy_or_no(text):
 
 promptsmaster = {    
 
-    "Role/Persona: " : ["Teacher/Tutor", "Creative Writer", "Email replier", "Copywriter", 
-                   "Fact Checker", "Practice Interviewer", "Brainstorming Partner","Social Media strategist", "Researcher"],
+    "Role/Persona: " : ["Teacher/Tutor", "Creative Writer", "Email replier", "Copywriter", "Fact Checker", "Practice Interviewer", 
+                        "Brainstorming Partner","Social Media strategist", "Researcher"],
 
     "custom_prompt_settings" : ["Precise & Concise", "Balanced", "Creative & Exploratory", "Custom Settings (Advanced)", "Skip"],
 
+    "Teacher/Tutor" : ["Explain everything like I'm 5 years old", "Socratic Tutor", "Step-by-step practical guide", 
+                    "Intensive upskill", "Forced Feynman", "Language proficiency"], 
 
-
-    "Teacher/Tutor" : ["Explain everything like I'm 5 years old", 
-                         "Socratic Tutor", 
-                         "Step-by-step practical guide", 
-                         "Intensive upskill", 
-                         "Forced Feynman",
-                         "Language proficiency"], 
-    "Creative Writer" : ["Sci-Fi",
-                                "Epic Adventure",
-                                "Romance",
-                                "Horror"], 
+    "Creative Writer" : ["Sci-Fi", "Epic Adventure", "Romance", "Horror"], 
     
     "Email replier" : ["Professional", "Sales Oriented","Friendly"], 
     
     "Copywriter" : ["Conversion Copywriter", "Cold Email Specialist" , "Storytelling specialist", "Ad copywriter for paid media", "Content Marketer / SEO Copywriter"], 
-                   
+                
     "Fact Checker" : ["General Claim & News Verifier", "Scientific & Academic Checker", 
-                      "Data & Statistics Interpreter", "Bias Auditor","Critical Thinking Companion"],
+                    "Data & Statistics Interpreter", "Bias Auditor","Critical Thinking Companion"],
     
-    "Practice Interviewer" : ["General Job Interviewer", "Technical & Coding Interviewer", "Media Interviewer", "Skeptic Cross-Examination Interviewer",
-    "College & Scholarship Evaluator",
-    "Academic Thesis Panelist"] ,
+    "Practice Interviewer" : ["General Job Interviewer", "Technical & Coding Interviewer", "Media Interviewer", 
+                            "Skeptic Cross-Examination Interviewer", "College & Scholarship Evaluator", "Academic Thesis Panelist"] ,
     
-    "Brainstorming Partner": [
-    "Wild Ideation & Moonshot Thinker",
-    "Marketing & Publicity Strategist",
-    "Business Model & Monetization Strategist",
-    "Creative Writer & Naming Specialist",
-    "Devil's Advocate & Risk Highlighter"
-],
+    "Brainstorming Partner": ["Wild Ideation & Moonshot Thinker", "Marketing & Publicity Strategist", "Business Model & Monetization Strategist", 
+                            "Creative Writer & Naming Specialist", "Devil's Advocate & Risk Highlighter"],
     
-    "Social Media strategist": [
-    "Short-Form Video & Hooks Creator",
-    "Viral Content & Growth Hacker",
-    "Community Builder & Engagement Specialist",
-    "Brand Voice & Social Presence Manager",
-    "Analytics & Campaign Performance Strategist"],
+    "Social Media strategist": ["Short-Form Video & Hooks Creator", "Viral Content & Growth Hacker","Community Builder & Engagement Specialist", 
+                                "Brand Voice & Social Presence Manager", "Analytics & Campaign Performance Strategist"],
 
     "Researcher" : ["Focus on macroscale (big picture)", "Focus on the micro details", "Focus on a narrative exploration", "Balanced Focus"],
     
-           
+        
 
 }
 
@@ -623,39 +648,16 @@ role_descriptions = {
 
 
             
-def main():
-    help_manual()
-    while True:
-            print("Welcome to your assistant builder companion.\n")            
-            print("Your helper and guide for best llm usage by Lomelino Digital\n")
-            magic_prompt = prompt_builder()
-            magic_prompt_output = prompt_output(magic_prompt)
-            print(50*'-')
-            print(magic_prompt_output)
-            print(50*'-')
-            copy_or_no(magic_prompt_output)
-            if (yes_or_no("Would you like to build another assistant? ")):
-                continue
-            else:
-                print("\nSee you soon!")
-                break
-    sys.exit()
-
- 
 
 
 
+# Execution:
 
-
-# program:
-
-try:
-    main() 
-            
-
-
-except (KeyboardInterrupt, EOFError):
-    print("\nSee you soon!")
+if __name__ == '__main__':
+    try:
+        main()    
+    except (KeyboardInterrupt, EOFError):
+        print("\nSee you soon!")
 
 
 
