@@ -25,10 +25,10 @@ jobs:
 
     - name: Build with PyInstaller
       run: |
-        pyinstaller --onefile --clean automate-the-boring-stuff/projects/staff-role-builder/staff_role_builder_v2.py
+        pyinstaller --onefile --clean automate-the-boring-stuff/projects/staff-role-builder/criador_de_assistenteIA.py
 
     - name: Upload Executable Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: prompt-companion-windows-exe
+        name: criador-assistente-windows-exe
         path: dist/*.exe
